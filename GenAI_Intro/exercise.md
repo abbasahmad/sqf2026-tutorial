@@ -79,20 +79,18 @@ You can work inside either `todo/` or `solution/`:
 cd GenAI_Intro/todo        # or: cd GenAI_Intro/solution
 ```
 
-### 3. Add your API keys
+### 3. Add the `.env` file with your API keys
 
-Copy the example file in that folder and paste in your real keys:
-
-```bash
-cp .env.example .env          # Windows: copy .env.example .env
-```
-
-Then edit `.env`:
+In the folder you're working in (`todo/` or `solution/`), create a file named
+`.env` and put the two keys I'll give you inside it:
 
 ```
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 ```
+
+> I'll hand you the keys (or a ready-made `.env`) during the workshop — just drop
+> the file next to `app.py`. The app reads it automatically on startup.
 
 ### 4. Run the server
 
