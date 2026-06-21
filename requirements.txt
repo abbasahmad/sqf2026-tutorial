@@ -1,0 +1,19 @@
+# All Python packages for the whole workshop — the local RAG tutorial AND the
+# GenAI API lab. Install once into a single virtual environment at the repo root:
+#
+#   python -m venv .venv
+#   source .venv/bin/activate     # macOS / Linux   (Windows: .venv\Scripts\activate)
+#   pip install -r requirements.txt
+
+# ── tutorial/ — local RAG + local LLM ─────────────────────────────────────────
+pypdf>=5.0.0                 # reads text out of the PDF document(s) in tutorial/docs/
+sentence-transformers>=3.0.0 # turns text into vectors (downloads a small local model + PyTorch)
+numpy>=1.26                  # cosine-similarity maths on the vectors
+ollama>=0.3.0                # talks to the local Llama model running via Ollama
+
+# ── GenAI_Intro/ — OpenAI + Anthropic API lab ─────────────────────────────────
+Flask>=3.0                   # web framework that serves the routes
+openai>=1.40                 # official OpenAI SDK (GPT-4o, reasoning models, DALL-E)
+anthropic>=0.39              # official Anthropic SDK (Claude)
+tiktoken>=0.7                # OpenAI's exact tokeniser, for counting tokens
+python-dotenv>=1.0           # loads API keys from each app's .env file
