@@ -11,26 +11,31 @@ strong Python background required)
 ## About This Workshop
 
 AI is becoming part of everyday software engineering. This workshop shows how to
-use it **locally** — for **data privacy, cost control, and transparency**.
+use it — first the **cloud LLM APIs** (OpenAI and Claude) to learn the building
+blocks, then **locally** on your own laptop for **data privacy, cost control, and
+transparency**.
 
-Everything runs **on your own laptop** in plain Python: no SaaS tools, no no-code
-platforms, no API keys, and your documents never leave your machine. By the end
-of the day you will have built a small **local AI assistant for testing** that
-retrieves answers from your own requirement documents.
+The local core runs **on your own laptop** in plain Python — no SaaS tools, no
+no-code platforms, and your documents never leave your machine. By the end of the
+day you will have built a small **local AI assistant for testing** that retrieves
+answers from your own requirement documents.
 
 ---
 
 ## What You Will Build
 
-A simple, readable pipeline in three small steps:
+A simple, readable pipeline you build up step by step:
 
 1. **See tokenization** in the browser — how text becomes tokens.
-2. **A local LLM** — run **Llama 3B** on your laptop with **Ollama** and ask it
+2. **Use the cloud LLM APIs** — call **OpenAI (GPT)** and **Anthropic (Claude)**
+   from Python to learn the building blocks: tokens, prompts, system messages,
+   temperature, reasoning models, and multi-turn chat.
+3. **A local LLM** — run **Llama 3B** on your laptop with **Ollama** and ask it
    an ISTQB question. It answers from memory — and may get it wrong.
-3. **RAG retrieval from scratch** — pull the ISTQB syllabus PDF, chunk it, embed
+4. **RAG retrieval from scratch** — pull the ISTQB syllabus PDF, chunk it, embed
    it with a small local model, and find the most relevant pieces using **cosine
    similarity**. No LLM, no API.
-4. **RAG + LLM together** — feed the retrieved syllabus chunks to the local model
+5. **RAG + LLM together** — feed the retrieved syllabus chunks to the local model
    so it finally answers the same question **correctly and grounded** in the
    document.
 
@@ -202,30 +207,32 @@ You should see `sentence-transformers`, `numpy`, `pypdf`, `ollama`, `Flask`,
 
 ## The Hands-On Lab
 
-All the code lives in **[`tutorial/`](tutorial/)** as three short, heavily
-commented Python files you run in order:
+The lab runs in **five steps**, across two folders:
 
 ```
-tutorial/
-├── 1_local_llm.py      # run + call a local Llama 3B (via Ollama)
-├── 2_rag.py            # RAG retrieval from the syllabus PDF, no AI model
-├── 3_rag_plus_llm.py   # combine retrieval with the local model
-├── docs/               # the ISTQB CTFL syllabus PDF (add your own .pdf/.md)
-└── README.md           # step-by-step instructions
+GenAI_Intro/            # Step 1 — the cloud-API lab (OpenAI + Claude)
+├── todo/               #   learner version: implement each route yourself
+├── solution/           #   completed version to compare against
+└── exercise.md         #   step-by-step walkthrough
+
+tutorial/               # Steps 2–4 — local LLM + RAG (no cloud, no API keys)
+├── 1_local_llm.py      #   run + call a local Llama 3B (via Ollama)
+├── 2_rag.py            #   RAG retrieval from the syllabus PDF, no AI model
+├── 3_rag_plus_llm.py   #   combine retrieval with the local model
+├── docs/               #   the ISTQB CTFL syllabus PDF (add your own .pdf/.md)
+└── README.md           #   step-by-step instructions
 ```
 
 > Packages for both parts of the workshop are installed once from the
 > **[`requirements.txt`](requirements.txt)** at the repo root — there is no
-> per-folder requirements file.
+> per-folder requirements file. Keep the workshop virtual environment active
+> (`(venv)` in your prompt) for every step; if it isn't, re-run the activate
+> command from [Step 1 of the setup](#3-set-up-the-project-virtual-environment--packages).
 
-The three steps deliberately ask the **same question** ("what are the seven
-testing principles?"). In Step 1 the model answers from memory and gets it
-wrong; in Step 3, fed the real syllabus, it answers correctly. That contrast is
-the whole point.
-
-> Run these from inside `tutorial/` (`cd tutorial`) with the workshop virtual
-> environment active (`(venv)` in your prompt). If it isn't, re-run the activate
-> command from [Step 1](#3-set-up-the-project-virtual-environment--packages).
+The local steps (2 and 4) deliberately ask the **same question** ("what are the
+seven testing principles?"). In **Step 2** the model answers from memory and
+gets it **wrong**; in **Step 4**, fed the real syllabus, it answers
+**correctly**. That contrast is the whole point.
 
 ### Step 0 — See tokenization in your browser (no code)
 
@@ -234,7 +241,20 @@ Open the OpenAI tokenizer and type a sentence:
 Watch your text get split into **tokens** (small pieces) — the first thing every
 model does with text.
 
-### Step 1 — Run and call a local LLM
+### Step 1 — Intro to GenAI APIs (OpenAI + Claude)
+
+Work through **[`GenAI_Intro/`](GenAI_Intro/)**: a small Flask app where you call
+the **OpenAI (GPT)** and **Anthropic (Claude)** APIs one route at a time —
+counting tokens, sending prompts, system messages, temperature, reasoning
+models, image generation, and a stateless multi-turn chat. Implement each route
+in `todo/`, compare with `solution/`.
+
+👉 Full walkthrough: **[GenAI_Intro/exercise.md](GenAI_Intro/exercise.md)**
+
+> The rest of the steps run **locally** with no cloud and no API keys. Run them
+> from inside `tutorial/` (`cd tutorial`).
+
+### Step 2 — Run and call a local LLM
 
 ```bash
 python 1_local_llm.py
@@ -244,7 +264,7 @@ Asks the local Llama 3B model: *"what are the seven ISTQB testing principles?"*
 The model answers from its **general memory** — it has not seen the syllabus, so
 it confidently makes up the wrong principles. That's the problem RAG solves.
 
-### Step 2 — RAG retrieval, no AI model
+### Step 3 — RAG retrieval, no AI model
 
 ```bash
 python 2_rag.py
@@ -256,7 +276,7 @@ with a small local model, saves them to `embeddings.json`, and searches for the
 slower (it embeds the whole PDF once); later runs reuse `embeddings.json`. To
 force a rebuild, delete `embeddings.json`.
 
-### Step 3 — RAG + local LLM together
+### Step 4 — RAG + local LLM together
 
 ```bash
 python 3_rag_plus_llm.py
@@ -264,10 +284,10 @@ python 3_rag_plus_llm.py
 
 Retrieves the relevant chunks from the syllabus, pastes them into the prompt as
 context, and asks the local model the **same question** — now answered **using
-only the syllabus**. Compare this answer to Step 1: this is why
+only the syllabus**. Compare this answer to Step 2: this is why
 Retrieval-Augmented Generation matters.
 
-> 👉 Full step-by-step lab instructions: **[tutorial/README.md](tutorial/README.md)**
+> 👉 Full step-by-step local-lab instructions: **[tutorial/README.md](tutorial/README.md)**
 
 ---
 
